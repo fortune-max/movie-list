@@ -24,7 +24,7 @@ const CreatePlaylistButton = styled.button`
 `;
 
 type NewPlaylistButtonProps = {
-    setPlaylists: (fn: (prev: MovieList[]) => {}) => {}
+    setPlaylists: React.Dispatch<React.SetStateAction<MovieList[]>>
 };
 
 const NewPlaylistButton = ({ setPlaylists } : NewPlaylistButtonProps) => {

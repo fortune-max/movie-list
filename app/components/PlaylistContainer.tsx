@@ -23,7 +23,7 @@ const PlaylistWrapper = styled.div`
 
 type PlaylistContainerProps = {
     playlists: MovieList[],
-    setPlaylists: (fn: (prev: MovieList[]) => {}) => {}
+    setPlaylists: React.Dispatch<React.SetStateAction<MovieList[]>>
 };
 
 const PlaylistContainer = ({ playlists, setPlaylists }: PlaylistContainerProps) => {
