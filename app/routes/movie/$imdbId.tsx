@@ -1,5 +1,6 @@
 import { sdk } from '~/libs/client';
 import { json } from "@remix-run/node";
+import { getBackdropUrl } from '~/utils';
 import { useLoaderData } from "@remix-run/react";
 
 type ParamProps = {
@@ -7,15 +8,45 @@ type ParamProps = {
 };
  
 export async function loader({ params }: ParamProps) {
+    const backDropUrl = await getBackdropUrl(params.imdbId);
     const { searchMovieById } = await sdk.SearchMovieById({
         searchMovieByIdId: params.imdbId
     });
-    return json(searchMovieById);
+
+    return json({
+        searchMovieById,
+        backDropUrl
+    });
 }
  
 export default function Movie() {
-    const data = useLoaderData<typeof loader>();
-    console.log(data);
+    const {
+        searchMovieById: movie,
+        backDropUrl
+    } = useLoaderData<typeof loader>();
+
+    styles.wrapper.backgroundImage = `url(${backDropUrl})`;
+
+    if (!movie)
+        return <div>Movie not found</div>
+
+    return (
+        <div style={styles.wrapper}>
+            <img
+                src={movie.Poster || "https://via.placeholder.com/300x450"}
+                alt={movie.Title || "Movie Poster"}
+                width={300}
+                height={450}
+            />
+            <div style={styles.details}>
+                <h1>{movie.Title}</h1>
+                <p>{movie.Plot}</p>
+                <p>Starring: {movie.Actors}</p>
+                <p>⭐️ {JSON.stringify(movie.Ratings)}</p>
+                <p>{movie.Year}</p>
+            </div>
+        </div>
+    );
 }
 
 const styles = {
@@ -38,34 +69,3 @@ const styles = {
         color: "white",
     }
 }
-
-
-// export default async function Page({params}: {params: {imdb_id: string}}) {
-//     const movie = await getMovie(params.imdb_id);
-//     const {imdb_id} = params;
-//     const backDropUrl = await getBackdropUrl(imdb_id);
-//     const overview = await getOverview(imdb_id);
-//     styles.wrapper.backgroundImage = `url(${backDropUrl})`;
-
-//     if (!movie) {
-//         return <div>Movie not found</div>
-//     }
-
-//     return (
-//         <div style={styles.wrapper}>
-//             <img
-//                 src={movie.image_url}
-//                 alt={movie.name}
-//                 width={300}
-//                 height={450}
-//             />
-//             <div style={styles.details}>
-//                 <h1>{movie.name}</h1>
-//                 <p>{overview}</p>
-//                 <p>Starring: {movie.actors.join(", ")}</p>
-//                 <p>⭐️ {movie.rating}</p>
-//                 <p>{movie.year}</p>
-//             </div>
-//         </div>
-//     );
-// }
