@@ -1,12 +1,3 @@
-query GetMovieLists($getMovieListId: Int!) {
-    getMovieList(id: $getMovieListId) {
-        id
-        created_at
-        name
-        email
-    }
-}
-
 query GetMovieListItems($listId: Int!) {
     getMovieListItems(listId: $listId) {
         id
@@ -87,4 +78,31 @@ query SearchMovieById($searchMovieByIdId: String!) {
         Website
         Response
     }
+}
+
+query GetMovieList($getMovieListId: Int!) {
+    getMovieList(id: $getMovieListId) {
+        id
+        created_at
+        name
+        email
+    }
+}
+
+query GetMovieLists($email: String!) {
+    getMovieLists(email: $email) {
+        id
+        created_at
+        name
+        email
+    }
+}
+
+mutation CreateList($input: CreateListInput!) {
+  createList(input: $input) {
+    created_at
+    email
+    id
+    name
+  }
 }
