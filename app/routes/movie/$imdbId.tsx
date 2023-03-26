@@ -3,7 +3,7 @@ import { json } from "@remix-run/node";
 import { getBackdropUrl } from '~/utils';
 import { useLoaderData } from "@remix-run/react";
 
-const styles = {
+let styles = {
     wrapper: {
         backgroundImage: "url('https://image.tmdb.org/t/p/original/8Y43POKjjKDGI9MH89NW0NAzzp8.jpg')",
         backgroundSize: "cover",
@@ -75,7 +75,13 @@ export default function Movie() {
         backDropUrl
     } = useLoaderData<typeof loader>();
 
-    styles.wrapper.backgroundImage = `url(${backDropUrl})`;
+   styles = {
+        ...styles,
+        wrapper: {
+            ...styles.wrapper,
+            backgroundImage: `url(${backDropUrl})`
+        }
+    };
 
     if (!movie)
         return <div>Movie not found</div>
