@@ -260,6 +260,29 @@ export type CreateListMutationVariables = Exact<{
 
 export type CreateListMutation = { createList: { created_at: string, email: string, id: number, name: string } };
 
+export type AddMovieToListMutationVariables = Exact<{
+  listId: Scalars['Int'];
+  imdbId: Scalars['String'];
+}>;
+
+
+export type AddMovieToListMutation = { addMovie: { id: number, created_at: string, imdb_id: string, movie_list_id: number, movie: { Title?: string | null, Year?: string | null, Rated?: string | null, Released?: string | null, Runtime?: string | null, Genre?: string | null, Director?: string | null, Writer?: string | null, Actors?: string | null, Plot?: string | null, Language?: string | null, Country?: string | null, Awards?: string | null, Poster?: string | null, Metascore?: string | null, imdbRating?: string | null, imdbVotes?: string | null, imdbID?: string | null, Type?: string | null, DVD?: string | null, BoxOffice?: string | null, Production?: string | null, Website?: string | null, Response?: string | null, Ratings?: Array<{ Source?: string | null, Value?: string | null } | null> | null } } };
+
+export type RemoveMovieMutationVariables = Exact<{
+  removeMovieId: Scalars['Int'];
+  listId: Scalars['Int'];
+}>;
+
+
+export type RemoveMovieMutation = { removeMovie: boolean };
+
+export type DeletePlaylistMutationVariables = Exact<{
+  deleteListId: Scalars['Int'];
+}>;
+
+
+export type DeletePlaylistMutation = { deleteList: boolean };
+
 
 export const GetMovieListItemsDocument = /*#__PURE__*/ gql`
     query GetMovieListItems($listId: Int!) {
@@ -376,6 +399,56 @@ export const CreateListDocument = /*#__PURE__*/ gql`
   }
 }
     `;
+export const AddMovieToListDocument = /*#__PURE__*/ gql`
+    mutation AddMovieToList($listId: Int!, $imdbId: String!) {
+  addMovie(listId: $listId, imdbId: $imdbId) {
+    id
+    created_at
+    imdb_id
+    movie_list_id
+    movie {
+      Title
+      Year
+      Rated
+      Released
+      Runtime
+      Genre
+      Director
+      Writer
+      Actors
+      Plot
+      Language
+      Country
+      Awards
+      Poster
+      Ratings {
+        Source
+        Value
+      }
+      Metascore
+      imdbRating
+      imdbVotes
+      imdbID
+      Type
+      DVD
+      BoxOffice
+      Production
+      Website
+      Response
+    }
+  }
+}
+    `;
+export const RemoveMovieDocument = /*#__PURE__*/ gql`
+    mutation RemoveMovie($removeMovieId: Int!, $listId: Int!) {
+  removeMovie(id: $removeMovieId, listId: $listId)
+}
+    `;
+export const DeletePlaylistDocument = /*#__PURE__*/ gql`
+    mutation DeletePlaylist($deleteListId: Int!) {
+  deleteList(id: $deleteListId)
+}
+    `;
 
 export type SdkFunctionWrapper = <T>(action: (requestHeaders?:Record<string, string>) => Promise<T>, operationName: string, operationType?: string) => Promise<T>;
 
@@ -401,6 +474,15 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     CreateList(variables: CreateListMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<CreateListMutation> {
       return withWrapper((wrappedRequestHeaders) => client.request<CreateListMutation>(CreateListDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'CreateList', 'mutation');
+    },
+    AddMovieToList(variables: AddMovieToListMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<AddMovieToListMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<AddMovieToListMutation>(AddMovieToListDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'AddMovieToList', 'mutation');
+    },
+    RemoveMovie(variables: RemoveMovieMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<RemoveMovieMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<RemoveMovieMutation>(RemoveMovieDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'RemoveMovie', 'mutation');
+    },
+    DeletePlaylist(variables: DeletePlaylistMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<DeletePlaylistMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<DeletePlaylistMutation>(DeletePlaylistDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'DeletePlaylist', 'mutation');
     }
   };
 }

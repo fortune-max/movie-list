@@ -21,7 +21,11 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body>
+      <body
+        style={{
+          margin: 0
+        }}
+      >
         <Outlet />
         <ScrollRestoration />
         <Scripts />

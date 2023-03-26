@@ -1,33 +1,55 @@
 import { Modal } from 'antd';
 import { useState } from 'react';
 import { sdk } from '~/libs/client';
-import styled from 'styled-components';
 import { MY_EMAIL_KEY } from '~/constants';
 import type { MovieList } from '~/generated/graphql';
 
-const CreatePlaylistButton = styled.button`
-  background-color: #4CAF50;
-  color: white;
-  padding: 10px 20px;
-  border-radius: 5px;
-  border: none;
-  font-size: 16px;
-  cursor: pointer;
+const styles = {
+    button: {
+        backgroundColor: "#4CAF50",
+        color: "white",
+        padding: "10px 20px",
+        borderRadius: "5px",
+        border: "none",
+        fontSize: "16px",
+        cursor: "pointer",
 
-  &:hover {
-    background-color: #3e8e41;
-  }
+        "&:hover": {
+            backgroundColor: "#3e8e41"
+        },
 
-  &:focus {
-    outline: none;
-  }
-`;
+        "&:focus": {
+            outline: "none"
+        }
+    },
+    modal: {
+        display: "flex",
+        flexDirection: "column" as "column",
+        alignItems: "center",
+        gap: "1rem"
+    },
+    input: {
+        width: "300px",
+        padding: "12px 20px",
+        margin: "8px 0",
+        boxSizing: "border-box" as "border-box",
+        border: "2px solid #ccc",
+        borderRadius: "4px",
+        backgroundColor: "#F7F7F7",
+        fontSize: "16px",
+        color: "#333",
 
-type NewPlaylistButtonProps = {
-    setPlaylists: React.Dispatch<React.SetStateAction<MovieList[]>>
+        "&:focus": {
+            outline: "none",
+            border: "2px solid #6F9FFF",
+            boxShadow: "0 0 0 2px #6F9FFF"
+        }
+    }
 };
 
-const NewPlaylistButton = ({ setPlaylists } : NewPlaylistButtonProps) => {
+const NewPlaylistButton = ({ setPlaylists } : {
+    setPlaylists: React.Dispatch<React.SetStateAction<MovieList[]>>
+}) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [playlistName, setPlaylistName] = useState('');
 
@@ -61,10 +83,18 @@ const NewPlaylistButton = ({ setPlaylists } : NewPlaylistButtonProps) => {
                     setIsModalOpen(false);
                 }}
             >
-                <h1>Create New Playlist</h1>
-                <input type="text" value={playlistName} onChange={(e) => setPlaylistName(e.target.value)} />
+                <div style={styles.modal}>
+                    <h1>Create New Playlist</h1>
+                    <input
+                        type="text"
+                        placeholder='Enter New Playlist name'
+                        value={playlistName}
+                        onChange={(e) => setPlaylistName(e.target.value)}
+                        style={styles.input}
+                    />
+                </div>
             </Modal>
-            <CreatePlaylistButton onClick={() => setIsModalOpen(true)}>Create New Playlist</CreatePlaylistButton>
+            <button style={styles.button} onClick={() => setIsModalOpen(true)}>Create New Playlist</button>
         </>
     );
 }
