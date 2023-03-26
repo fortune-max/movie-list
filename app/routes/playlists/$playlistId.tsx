@@ -1,9 +1,9 @@
+import { sdk } from '~/libs/client';
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import { sdk } from '~/libs/client';
 
 type ParamProps = {
-    params: { playlistId: number };
+    params: { playlistId: string };
 };
 
 export async function loader({ params }: ParamProps) {
