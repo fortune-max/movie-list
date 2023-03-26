@@ -1,5 +1,6 @@
 import { format } from "date-fns";
 import styled from "styled-components";
+import { useNavigate } from "@remix-run/react"
 import type { MovieList } from "~/generated/graphql";
 
 const PlaylistListItemContainer = styled.div`
@@ -52,8 +53,12 @@ const PlaylistDescription = styled.p`
 const prettyDate = (date: string) => format(new Date(date), 'dd MMM, yyyy');
 
 const PlaylistListItem = ({ playlist }: { playlist: MovieList }) => {
+    const navigate = useNavigate();
+
     return (
-        <PlaylistListItemContainer>
+        <PlaylistListItemContainer
+            onClick={() => navigate(`/playlists/${playlist.id}`)}
+        >
             <PlaylistImage src={`https://picsum.photos/id/${playlist.id}/50/50`} alt={playlist.name} />
             <PlaylistName>{playlist.name}</PlaylistName>
             <PlaylistDescription>{prettyDate(playlist.created_at)}</PlaylistDescription>
